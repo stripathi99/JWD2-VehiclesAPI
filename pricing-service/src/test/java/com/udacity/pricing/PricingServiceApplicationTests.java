@@ -1,5 +1,6 @@
 package com.udacity.pricing;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -25,8 +26,15 @@ public class PricingServiceApplicationTests {
     for (int vehicleId = 1; vehicleId < 20; vehicleId++) {
       mockMvc.perform(get("/services/price?vehicleId=" + vehicleId))
           .andExpect(status().isOk())
+          .andExpect(content().contentType(APPLICATION_JSON_UTF8))
           .andExpect(content().json("{}"))
           .andExpect(jsonPath("$.vehicleId").value(vehicleId));
     }
+  }
+
+  @Test
+  public void test_for_invalid_id() throws Exception {
+    mockMvc.perform(get("/services/price?vehicleId=20"))
+        .andExpect(status().isNotFound());
   }
 }
