@@ -1,21 +1,23 @@
 package com.udacity.pricing;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
+import static org.springframework.hateoas.MediaTypes.HAL_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.udacity.pricing.api.PricingController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(PricingController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@AutoConfigureJsonTesters
 public class PricingServiceApplicationTests {
 
   @Autowired
@@ -23,18 +25,17 @@ public class PricingServiceApplicationTests {
 
   @Test
   public void get_all_19_prices() throws Exception {
-    for (int vehicleId = 1; vehicleId < 20; vehicleId++) {
-      mockMvc.perform(get("/services/price?vehicleId=" + vehicleId))
+    for (int i = 1; i < 20; i++) {
+      mockMvc.perform(get("/prices/" + i))
           .andExpect(status().isOk())
-          .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-          .andExpect(content().json("{}"))
-          .andExpect(jsonPath("$.vehicleId").value(vehicleId));
+          .andExpect(content().contentType(HAL_JSON_UTF8))
+          .andExpect(content().json("{}"));
     }
   }
 
   @Test
   public void test_for_invalid_id() throws Exception {
-    mockMvc.perform(get("/services/price?vehicleId=20"))
+    mockMvc.perform(get("/prices/20"))
         .andExpect(status().isNotFound());
   }
 }
