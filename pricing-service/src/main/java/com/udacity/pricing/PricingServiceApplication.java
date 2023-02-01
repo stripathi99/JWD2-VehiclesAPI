@@ -14,8 +14,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 
 /**
- * Creates a Spring Boot Application to run the Pricing Service.
- * TODO: Convert the application from a REST API to a microservice.
+ * Creates a Spring Boot Application to run the Pricing Service - REST API.
  */
 @SpringBootApplication
 @EnableDiscoveryClient
